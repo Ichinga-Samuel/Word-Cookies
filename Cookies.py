@@ -11,6 +11,8 @@ def word_cookies(cookie):
 			# permutation produces invalid words, an intersection with the set of valid words will return
 			# the valid words produced by the permutation operation
 			words = {''.join(i) for i in it.permutations(cookie, i)} & valid_words
+			# there might be no valid words and permutation will return an empty set.
+			# no need to add them to the dictionary of cookies
 			if words != set():
 				cookies[f'{i} Letter Words'] = words
 
