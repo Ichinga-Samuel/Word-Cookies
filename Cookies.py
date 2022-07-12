@@ -1,22 +1,18 @@
-import itertools as it
-import pprint as pp
+from itertools import permutations
+from pprint import pprint
 
 
-def word_cookies(cookie):
-	with open('Common English Words.txt', 'r') as fh:
-		fh = fh.readlines()
-		valid_words = {i.strip() for i in fh}  # a set containing all the words
-		cookies = {}
-		for i in range(3, len(cookie)+1):
-			# permutation produces invalid words, an intersection with the set of valid words will return
-			# the valid words produced by the permutation operation
-			words = {''.join(i) for i in it.permutations(cookie, i)} & valid_words
-			# there might be no valid words and permutation will return an empty set.
-			# no need to add them to the dictionary of cookies
-			if words != set():
-				cookies[f'{i} Letter Words'] = words
+def word_cookies(cookie: str, lower: int = 3):
+	cookie = cookie.lower()
+	upper = len(cookie) + 1
+	with open('Common English Words.txt', 'r') as words:
+		# a set containing all the words
+		words = {i.strip().lower() for i in words.readlines() if lower <= len(i) <= upper}
 
-		pp.pprint(cookies, indent=2)
+		# Get correct words by intersecting the set of valid words and the permutations of the given cookie
+		# Arrange valid words in a dictionary using length of words as keys starting from the value of the lower range
+		return {f"{i} Letter Words": {''.join(word) for word in permutations(cookie, i)} & words for i in range(lower, upper)}
 
 
-word_cookies('Excellent')
+cookies = word_cookies('Excellent')
+pprint(cookies, indent=2)
